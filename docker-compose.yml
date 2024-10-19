@@ -8,6 +8,9 @@ services:
       context: nginx
       dockerfile: Dockerfile
     container_name: nginx
+    depends_on:
+      - php
+      - mysql
     volumes:
       - ./src:/var/www/html
     ports:
@@ -38,5 +41,13 @@ services:
       - 4306:3306
     volumes:
       - ./mysql:/var/lib/mysql
+    networks:
+      - laravel
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
     networks:
       - laravel
