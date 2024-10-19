@@ -61,11 +61,19 @@ services:
       context: php
       dockerfile: Dockerfile
     container_name: php
-    depends_on:
-      - mysql
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     entrypoint: ["php","artisan"]
+    networks:
+      - laravel
+
+  npm:
+    image: node:21-alpine
+    container_name: npm
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["npm"]
     networks:
       - laravel
