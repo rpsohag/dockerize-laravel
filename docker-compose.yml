@@ -19,18 +19,8 @@ services:
     networks:
       - laravel
 
-  php:
-    build:
-      context: php
-      dockerfile: Dockerfile
-    container_name: php
-    volumes:
-      - ./src:/var/www/html
-    networks:
-      - laravel
-
   mysql:
-    image: mysql:9.1.0
+    image: mysql:8.4
     container_name: mysql
     environment:
       - MYSQL_DATABASE=laravel_db
@@ -43,11 +33,39 @@ services:
       - ./mysql:/var/lib/mysql
     networks:
       - laravel
+
+  php:
+    build:
+      context: php
+      dockerfile: Dockerfile
+    container_name: php
+    depends_on:
+      - mysql
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - laravel
+
+  
   composer:
     image: composer:latest
     container_name: composer
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
+    networks:
+      - laravel
+
+  artisan:
+    build:
+      context: php
+      dockerfile: Dockerfile
+    container_name: php
+    depends_on:
+      - mysql
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php","artisan"]
     networks:
       - laravel
