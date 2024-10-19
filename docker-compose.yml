@@ -1,0 +1,27 @@
+networks:
+  laravel:
+    name: laravel
+services:
+  php:
+    image: php:8.4-rc-fpm-alpine
+    container_name: php
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:9.1.0
+    container_name: mysql
+    environment:
+      - MYSQL_DATABASE=laravel_db
+      - MYSQL_USER=laravel_user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=rootpassword
+    ports:
+      - 3306:3306
+    networks:
+      - laravel
+  nginx:
+    image: nginx:stable
+    container_name: nginx
+    networks:
+      - laravel
