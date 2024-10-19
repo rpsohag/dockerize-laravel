@@ -3,23 +3,11 @@ networks:
     name: laravel
 services:
   
-  # nginx:
-  #   build:
-  #     context: nginx
-  #     dockerfile: Dockerfile
-  #   container_name: nginx
-  #   volumes:
-  #     - ./src:/var/www/html
-  #   ports:
-  #     - 8001:80
-  #     - 443:443
-  #   networks:
-  #     - laravel
-  apache:
+  nginx:
     build:
-      context: apache
+      context: nginx
       dockerfile: Dockerfile
-    container_name: apache
+    container_name: nginx
     volumes:
       - ./src:/var/www/html
     ports:
@@ -27,9 +15,14 @@ services:
       - 443:443
     networks:
       - laravel
+
   php:
-    image: php:8.4-rc-fpm-alpine
+    build:
+      context: php
+      dockerfile: Dockerfile
     container_name: php
+    volumes:
+      - ./src:/var/www/html
     networks:
       - laravel
 
